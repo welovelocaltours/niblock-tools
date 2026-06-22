@@ -25,6 +25,12 @@ header .t small{display:block;font-weight:500;font-size:.72rem;letter-spacing:.0
 .card p{color:var(--muted);font-size:.9rem}
 .card .go{color:var(--brand);font-weight:700;font-size:.88rem;margin-top:10px;display:inline-block}
 .sub{grid-column:1/-1;font-family:'Plus Jakarta Sans';font-weight:700;color:var(--navy);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-top:10px}
+.flow{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:24px 0 6px;box-shadow:0 8px 24px rgba(12,44,71,.06)}
+.flow h2{font-family:'Plus Jakarta Sans';color:var(--navy);font-size:1.05rem;margin-bottom:12px}
+.flow .byk{font-weight:500;color:var(--muted);font-size:.8rem}
+.flow ol{margin:0;padding-left:22px;color:#39434f}
+.flow li{margin-bottom:9px;font-size:.93rem}
+.flow li b{color:var(--navy)}
 .foot{color:var(--muted);font-size:.8rem;padding:20px 0 40px;text-align:center}
 @media(max-width:640px){.grid{grid-template-columns:1fr}}
 </style></head>
@@ -35,6 +41,16 @@ header .t small{display:block;font-weight:500;font-size:.72rem;letter-spacing:.0
     <h1>Back-of-house tools</h1>
     <p>Private quoting and proposal tools for the Niblock team. These show your costs and margins — keep this page to yourselves.</p>
     <div class="flag">🔒 Password-protected · not indexed by search engines · not linked from the public website</div>
+  </div>
+  <div class="flow">
+    <h2>How a lead becomes a proposal <span class="byk">— run by Kate; Niblock don't log into anything</span></h2>
+    <ol>
+      <li><b>Lead arrives</b> — a website enquiry emails <b>info@niblocklogistics.co.uk</b> (Niblock &amp; Kate both see it).</li>
+      <li><b>Discovery form</b> — run it on the call → <b>Generate</b> → <b>Email to Niblock</b> (your record); the figures carry into the calculator automatically.</li>
+      <li><b>Quote Calculator</b> — opens pre-filled; check the rate card and you get the price, monthly value &amp; first-year value.</li>
+      <li><b>Claude writes the proposal</b> — paste the discovery summary + the quote into <b>Claude (your own account)</b> and say <i>“write the proposal for [prospect]”</i>. Claude researches their brand, writes it and exports a branded PDF. <b>Niblock never need Claude access.</b></li>
+      <li><b>Send</b> — save the PDF and email it to the prospect.</li>
+    </ol>
   </div>
   <div class="grid">
     <a class="card" href="quote-calculator.html">
