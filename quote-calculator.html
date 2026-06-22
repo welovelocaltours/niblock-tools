@@ -262,7 +262,19 @@ Final pricing confirmed after a short discovery call; live courier rates from yo
 }
 function copySummary(){const t=$("summary");t.select();document.execCommand("copy");event.target.textContent="Copied ✓";setTimeout(()=>event.target.textContent="Copy summary",1500);}
 document.addEventListener("input",calc);
-loadRates();calc();
+function applyHandoff(){
+  var h; try{h=JSON.parse(localStorage.getItem("niblockHandoff")||"null");}catch(e){}
+  if(!h) return;
+  localStorage.removeItem("niblockHandoff");
+  var set=function(id,v){ if(v!=null&&v!==""&&$(id)) $(id).value=v; };
+  ["skus","orders","items","returns","pallets","inbound","giftpct","giftprempct","expresspct","p_uk","p_rem","p_eu","p_row"].forEach(function(k){set(k,h[k]);});
+  if(h.packsupply&&$("packsupply")) $("packsupply").value=h.packsupply;
+  if($("expiry")) $("expiry").checked=!!h.expiry;
+  var b=document.createElement("div"); b.className="banner"; b.style.background="#e7f6ec"; b.style.borderColor="#bfe6cb"; b.style.color="#166534";
+  b.innerHTML="✓ Loaded the figures from your discovery form"+(h.biz?" for <b>"+h.biz+"</b>":"")+" — check the rate card is set to your real costs, then read the quote.";
+  var w=document.querySelector(".wrap"); if(w) w.insertBefore(b,w.firstChild);
+}
+loadRates();applyHandoff();calc();
 </script>
 </body>
 </html>

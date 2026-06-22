@@ -59,8 +59,8 @@
 
 <div class="wrap">
   <div class="intro">
-    <h1>Let's build your fulfilment quote</h1>
-    <p>A few quick questions about your business and volumes. It takes ~3 minutes, there's no obligation, and we'll come back with clear, tailored pricing — usually the same working day. (Internal note: this doubles as the discovery-call script; answers map straight to the quote calculator.)</p>
+    <h1>Discovery call — capture &amp; quote</h1>
+    <p>Work through this on the call with a prospect. When you hit <b>Generate summary</b> you get a tidy record you can <b>email to Niblock</b> (your record of the call) and <b>carry straight into the Quote Calculator</b> — no re-typing. Then drop the price into a proposal and send.</p>
   </div>
 
   <form id="form" onsubmit="return false;">
@@ -165,10 +165,15 @@
   </form>
 
   <div class="result" id="result">
-    <h2>Discovery summary</h2>
-    <p class="sub">Copy this into the quote calculator (and your CRM). When Resend is connected, this will also email to info@niblocklogistics.co.uk on submit.</p>
+    <h2>Discovery summary — your call record</h2>
+    <p class="sub"><b>What to do next:</b> &nbsp;1) <b>Email to Niblock</b> — your record of the call (lands in info@niblocklogistics.co.uk). &nbsp;2) <b>Open the Quote Calculator</b> — these figures carry over automatically; check your rate card and read off the price. &nbsp;3) Open a proposal template, paste this summary + the price + the suggested testimonial, then <b>Save as PDF</b> and send.</p>
     <textarea class="out" id="out" readonly></textarea>
-    <div class="toolbar"><button class="btn" type="button" onclick="copyOut()">Copy summary</button></div>
+    <div class="toolbar">
+      <button class="btn" type="button" onclick="emailToNiblock()">✉ Email to Niblock</button>
+      <a class="btn" href="quote-calculator.html" style="display:inline-block;text-decoration:none">→ Open Quote Calculator</a>
+      <button class="btn ghost" type="button" onclick="downloadTxt()">⬇ Download (.txt)</button>
+      <button class="btn ghost" type="button" onclick="copyOut()">Copy</button>
+    </div>
   </div>
 
   <p class="foot">Niblock Logistics Solutions · 01293 773130 · info@niblocklogistics.co.uk · No obligation, no lock-in.</p>
@@ -228,10 +233,20 @@
     L.push("Applies:      "+(extras.length?extras.join("; "):"—"));
     L.push("Notes:        "+(val('notes')||"—"));
     $('out').value=L.join("\n");
+    // hand the figures to the Quote Calculator (same browser) so they aren't re-typed
+    var g=radio('gift'), gp=(+val('giftpct')||0), ex=radio('express');
+    var handoff={biz:val('biz'),skus:val('skus'),orders:val('orders'),items:val('items'),returns:val('returns'),pallets:val('pallets'),inbound:val('inbound'),p_uk:val('p_uk'),p_rem:val('p_rem'),p_eu:val('p_eu'),p_row:val('p_row'),packsupply:(radio('pack')==='We supply our own'?'cli':'nib'),expiry:(radio('expiry')==='Yes'),expresspct:(ex==='On all orders'?100:ex==='On some orders'?30:0)};
+    if(g==='Standard'){handoff.giftpct=gp;handoff.giftprempct=0;}
+    else if(g==='Premium'){handoff.giftpct=0;handoff.giftprempct=gp;}
+    else if(g==='Both'){handoff.giftprempct=Math.round(gp/2);handoff.giftpct=gp-Math.round(gp/2);}
+    else {handoff.giftpct=0;handoff.giftprempct=0;}
+    try{localStorage.setItem('niblockHandoff',JSON.stringify(handoff));}catch(e){}
     $('result').classList.add('show');
     $('result').scrollIntoView({behavior:'smooth'});
   }
-  function copyOut(){const t=$('out');t.select();document.execCommand('copy');event.target.textContent='Copied ✓';setTimeout(()=>event.target.textContent='Copy summary',1500);}
+  function emailToNiblock(){var biz=val('biz')||'prospect';window.location.href='mailto:info@niblocklogistics.co.uk?subject='+encodeURIComponent('Discovery — '+biz)+'&body='+encodeURIComponent($('out').value);}
+  function downloadTxt(){var biz=(val('biz')||'prospect').replace(/[^a-z0-9]+/gi,'-').toLowerCase();var blob=new Blob([$('out').value],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='discovery-'+biz+'-'+new Date().toISOString().slice(0,10)+'.txt';document.body.appendChild(a);a.click();a.remove();}
+  function copyOut(){const t=$('out');t.select();document.execCommand('copy');event.target.textContent='Copied ✓';setTimeout(()=>event.target.textContent='Copy',1500);}
 </script>
 </body>
 </html>
