@@ -1,0 +1,208 @@
+<!DOCTYPE html><html lang="en-GB"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Niblock — Proposal Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#0090d0;--brand-dark:#0077af;--navy:#0c2c47;--muted:#5c6878;--line:#e5ebf1;--soft:#f4f8fb;--accent:#0090d0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:#1a2430;background:var(--soft);line-height:1.6}
+a{color:var(--brand-dark)}
+header.bar{background:var(--navy);color:#fff;padding:18px 0}
+header.bar .wrap{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:14px}
+header.bar img{height:26px;background:#fff;padding:5px 9px;border-radius:7px}
+header.bar .t{font-family:'Plus Jakarta Sans';font-weight:800;font-size:1.05rem}
+header.bar .t small{display:block;font-weight:500;font-size:.7rem;letter-spacing:.04em;color:#9fb2c9;text-transform:uppercase}
+.layout{max-width:1240px;margin:24px auto;padding:0 22px;display:grid;grid-template-columns:400px 1fr;gap:26px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(12,44,71,.06)}
+.form{padding:22px;position:sticky;top:18px}
+.form h1{font-family:'Plus Jakarta Sans';color:var(--navy);font-size:1.2rem;margin-bottom:4px}
+.form .hint{color:var(--muted);font-size:.84rem;margin-bottom:16px}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.f .sub{font-weight:500;color:var(--muted)}
+.f input,.f textarea{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;font-family:inherit;font-size:.92rem;color:#1a2430}
+.f input:focus,.f textarea:focus{outline:0;border-color:var(--brand)}
+.figs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sechead{font-family:'Plus Jakarta Sans';font-weight:700;color:var(--navy);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:18px 0 10px;border-top:1px solid var(--line);padding-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--brand);color:#fff;font-family:'Plus Jakarta Sans';font-weight:700;border:0;border-radius:999px;padding:13px 20px;font-size:1rem;cursor:pointer;transition:.15s;margin-top:8px}
+.btn:hover{background:var(--brand-dark)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.sec:hover{border-color:var(--brand);background:var(--soft)}
+.msg{font-size:.86rem;margin-top:10px;min-height:1.2em}
+.tools-row{display:flex;gap:10px;margin-bottom:14px}
+.preview-wrap{padding:0}
+.empty{padding:60px 30px;text-align:center;color:var(--muted)}
+.empty svg{opacity:.4;margin-bottom:12px}
+/* ===== the proposal document ===== */
+.doc{background:#fff;border-radius:14px;overflow:hidden}
+.doc .cover{background:linear-gradient(125deg,var(--navy),#16507f);color:#fff;padding:40px 44px}
+.doc .cover .logos{display:flex;align-items:center;gap:16px;margin-bottom:26px}
+.doc .cover .logos img{height:34px;background:#fff;padding:6px 10px;border-radius:8px;display:block}
+.doc .cover .logos .plus{color:#9fc7e6;font-size:1.3rem}
+.doc .cover .plogo{height:34px;max-width:170px;object-fit:contain;display:block}
+.doc .cover h1{font-family:'Plus Jakarta Sans';font-size:1.9rem;line-height:1.15;color:#fff;margin-bottom:8px}
+.doc .cover p{color:#cfe0f0;font-size:1.02rem;max-width:520px}
+.doc .cover .date{margin-top:18px;font-size:.82rem;color:#9fb2c9}
+.doc .body{padding:34px 44px}
+.doc h2{font-family:'Plus Jakarta Sans';color:var(--navy);font-size:1.2rem;margin:26px 0 10px}
+.doc .body>p{color:#39434f;margin-bottom:12px}
+.doc .lead{font-size:1.06rem;color:#2a3340}
+.doc .item{margin-bottom:12px}
+.doc .item h3{font-family:'Plus Jakarta Sans';font-size:1rem;color:var(--navy);margin-bottom:2px}
+.doc .item p{color:#39434f;font-size:.96rem}
+.doc .pstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 8px}
+.doc .pstat{background:var(--soft);border:1px solid var(--line);border-radius:11px;padding:14px}
+.doc .pstat .n{font-family:'Plus Jakarta Sans';font-weight:800;color:var(--navy);font-size:1.25rem}
+.doc .pstat .l{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.doc .pnote{background:#eef7fc;border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:12px 16px;color:#28506b;font-size:.92rem;margin:8px 0}
+.doc .fy{font-family:'Plus Jakarta Sans';font-weight:700;color:var(--navy);margin-top:10px}
+.doc .docfoot{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;color:var(--muted);font-size:.86rem}
+.doc .docfoot strong{color:var(--navy)}
+[contenteditable=true]:focus{outline:2px dashed var(--brand);outline-offset:3px;border-radius:4px}
+.editnote{background:#fff7e8;border:1px solid #f3dca8;color:#7a5410;border-radius:8px;padding:8px 12px;font-size:.8rem;margin:14px 22px 0}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.form{position:static}}
+@media print{
+  header.bar,.form,.tools-row,.editnote,.msg{display:none!important}
+  .layout{display:block;margin:0;padding:0}
+  .panel{border:0;box-shadow:none}
+  .doc{border-radius:0}
+  body{background:#fff}
+}
+</style></head>
+<body>
+<header class="bar"><div class="wrap"><img src="images/niblock-logo.png" alt="Niblock" onerror="this.style.display='none'"><div class="t">Proposal Generator<small>Internal — confidential · drafts for your approval</small></div></div></header>
+
+<div class="layout">
+  <!-- FORM -->
+  <div class="panel form">
+    <h1>New proposal</h1>
+    <p class="hint">Fill in the prospect details and the quote figures from the calculator, then generate a draft to review, edit and save as PDF.</p>
+
+    <div class="sechead" style="border-top:0;padding-top:0;margin-top:0">The prospect</div>
+    <div class="f"><label>Brand / company name</label><input id="brand" placeholder="e.g. Captain Chippies"></div>
+    <div class="f"><label>Contact name <span class="sub">(optional)</span></label><input id="contact" placeholder="e.g. Sam Patel"></div>
+    <div class="f"><label>What they sell</label><input id="sells" placeholder="e.g. premium frozen seafood boxes"></div>
+    <div class="f"><label>Their priorities <span class="sub">(comma separated)</span></label><input id="priorities" placeholder="e.g. accuracy, fast dispatch, EU shipping"></div>
+    <div class="f"><label>Discovery notes / context</label><textarea id="notes" rows="5" placeholder="Paste the discovery summary or key facts: volumes, SKUs, current setup, pain points, anything notable…"></textarea></div>
+    <div class="f"><label>Their logo URL <span class="sub">(optional)</span></label><input id="logo" placeholder="https://…/logo.png"></div>
+
+    <div class="sechead">Quote figures <span class="sub" style="text-transform:none;letter-spacing:0;font-size:.8rem">— from the calculator</span></div>
+    <div class="figs">
+      <div class="f"><label>Niblock fee / order</label><input id="fee" placeholder="£3.66"></div>
+      <div class="f"><label>Fulfilment / month</label><input id="fulfil" placeholder="£5,483"></div>
+      <div class="f"><label>Carriage / month <span class="sub">(pass-through)</span></label><input id="carriage" placeholder="£11,935"></div>
+      <div class="f"><label>Total / month</label><input id="total" placeholder="£17,418"></div>
+    </div>
+    <div class="f"><label>First-year value <span class="sub">(optional)</span></label><input id="firstyear" placeholder="£209,016"></div>
+
+    <button class="btn" id="gen">Generate draft proposal</button>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  </div>
+
+  <!-- PREVIEW -->
+  <div>
+    <div class="tools-row">
+      <button class="btn sec" id="savepdf" style="width:auto;padding:10px 18px" disabled>Save as PDF</button>
+      <button class="btn sec" id="copy" style="width:auto;padding:10px 18px" disabled>Copy text</button>
+    </div>
+    <div class="panel preview-wrap">
+      <div class="editnote" id="editnote" style="display:none">Tip: this draft is fully editable — click any text to tweak it before saving. Always read it through before sending.</div>
+      <div id="preview">
+        <div class="empty">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+          <p>Your draft proposal will appear here.<br>Fill in the form and click <b>Generate draft proposal</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+
+  // Pre-fill from the discovery handoff if present (same pipeline as the calculator)
+  try{
+    var brief=localStorage.getItem('niblockBrief');
+    if(brief && !$('notes').value){ $('notes').value=brief; }
+    var h=JSON.parse(localStorage.getItem('niblockHandoff')||'null');
+    if(h){ if(h.brand&&!$('brand').value)$('brand').value=h.brand; if(h.sells&&!$('sells').value)$('sells').value=h.sells; if(h.logo&&!$('logo').value)$('logo').value=h.logo; }
+  }catch(e){}
+
+  function figuresText(){
+    var L=[];
+    if($('fee').value) L.push('Niblock fee per order: '+$('fee').value);
+    if($('fulfil').value) L.push('Fulfilment fee per month: '+$('fulfil').value);
+    if($('carriage').value) L.push('Carriage per month (pass-through, courier cost + handling): '+$('carriage').value);
+    if($('total').value) L.push('Total per month: '+$('total').value);
+    if($('firstyear').value) L.push('Indicative first-year value: '+$('firstyear').value);
+    return L.join('\n');
+  }
+
+  function renderDoc(p){
+    var brand=esc($('brand').value)||'Your brand';
+    var logo=$('logo').value.trim();
+    var today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+    var plogo = logo ? '<img class="plogo" src="'+esc(logo)+'" alt="'+brand+'" onerror="this.style.display=\'none\'">' : '<span class="plus">+</span><span style="font-family:Plus Jakarta Sans;font-weight:800;font-size:1.1rem">'+brand+'</span>';
+    function items(arr){return (arr||[]).map(function(i){return '<div class="item"><h3>'+esc(i.title)+'</h3><p>'+esc(i.body)+'</p></div>';}).join('');}
+
+    // Deterministic price block from the entered figures
+    var stats=[];
+    if($('fee').value) stats.push(['Niblock fee / order',$('fee').value]);
+    if($('fulfil').value) stats.push(['Fulfilment / month',$('fulfil').value]);
+    if($('carriage').value) stats.push(['Carriage / month',$('carriage').value]);
+    if($('total').value) stats.push(['Total / month',$('total').value]);
+    var priceBlock='';
+    if(stats.length){
+      priceBlock='<h2>Your pricing</h2>'+
+        (p.pricing_note?'<p>'+esc(p.pricing_note)+'</p>':'')+
+        '<div class="pstats">'+stats.map(function(s){return '<div class="pstat"><div class="n">'+esc(s[1])+'</div><div class="l">'+esc(s[0])+'</div></div>';}).join('')+'</div>'+
+        ($('carriage').value?'<div class="pnote">Carriage is shown separately and billed as a pass-through at courier cost plus a small handling charge — Niblock does not mark up your postage. Your true cost of using us is the per-order fulfilment fee.</div>':'')+
+        ($('firstyear').value?'<p class="fy">Indicative first-year value: '+esc($('firstyear').value)+'</p>':'');
+    }
+
+    return '<div class="doc"><div class="cover">'+
+      '<div class="logos"><img src="images/niblock-logo.png" alt="Niblock" onerror="this.style.display=\'none\'">'+plogo+'</div>'+
+      '<h1>'+esc(p.headline||('Fulfilment proposal for '+brand))+'</h1>'+
+      '<p>'+esc(p.subhead||'')+'</p>'+
+      '<div class="date">Prepared for '+brand+' · '+today+'</div>'+
+      '</div><div class="body" contenteditable="true">'+
+      '<p class="lead">'+esc(p.intro||'')+'</p>'+
+      (p.challenges&&p.challenges.length?'<h2>What you’re dealing with</h2>'+items(p.challenges):'')+
+      (p.why&&p.why.length?'<h2>Why Niblock</h2>'+items(p.why):'')+
+      (p.how&&p.how.length?'<h2>How it would work for you</h2>'+items(p.how):'')+
+      priceBlock+
+      (p.closing?'<h2>Next step</h2><p>'+esc(p.closing)+'</p>':'')+
+      '<div class="docfoot"><strong>Niblock Logistics Solutions Ltd</strong> · Unit 8, Gatwick Business Park, Hookwood, Surrey RH6 0AH<br>01293 773130 · info@niblocklogistics.co.uk · niblocklogistics.co.uk</div>'+
+      '</div></div>';
+  }
+
+  $('gen').addEventListener('click',function(){
+    var btn=$('gen'),msg=$('msg');
+    if(!$('brand').value.trim()&&!$('sells').value.trim()){msg.style.color='#c0392b';msg.textContent='Add at least the brand name and what they sell.';return;}
+    var payload={brand:$('brand').value,contact:$('contact').value,sells:$('sells').value,priorities:$('priorities').value,notes:$('notes').value,figures:figuresText()};
+    btn.disabled=true;var t=btn.textContent;btn.textContent='Drafting…';msg.style.color='';msg.textContent='Writing your draft — this takes a few seconds.';
+    fetch('/api/proposal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(res){
+        btn.disabled=false;btn.textContent=t;
+        if(!res.ok||res.j.error){msg.style.color='#c0392b';msg.textContent=res.j.error||'Something went wrong — please try again.';return;}
+        if(!res.j.proposal){msg.style.color='#c0392b';msg.textContent='The draft came back in an unexpected format. Try again, or simplify the notes.';return;}
+        $('preview').innerHTML=renderDoc(res.j.proposal);
+        $('editnote').style.display='block';$('savepdf').disabled=false;$('copy').disabled=false;
+        msg.style.color='#0a7d28';msg.textContent='Draft ready — review and edit below, then Save as PDF.';
+      })
+      .catch(function(){btn.disabled=false;btn.textContent=t;msg.style.color='#c0392b';msg.textContent='Network error — please try again.';});
+  });
+
+  $('savepdf').addEventListener('click',function(){window.print();});
+  $('copy').addEventListener('click',function(){
+    var el=$('preview');var txt=el.innerText||'';
+    navigator.clipboard.writeText(txt).then(function(){$('copy').textContent='Copied!';setTimeout(function(){$('copy').textContent='Copy text';},1500);});
+  });
+})();
+</script>
+</body></html>
