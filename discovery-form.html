@@ -73,6 +73,7 @@
         <div class="f"><label>Email</label><input type="email" id="email" placeholder="jane@yourbrand.co.uk"></div>
         <div class="f"><label>Phone <span class="opt">(optional)</span></label><input type="tel" id="phone" placeholder="07000 000000"></div>
         <div class="f"><label>What do you sell?</label><input type="text" id="what" placeholder="e.g. small-batch hot sauce"></div>
+        <div class="f"><label>Logo URL <span class="opt">(or write “will send”)</span></label><input type="text" id="logo" placeholder="link to their logo — used on the proposal"></div>
       </div>
     </fieldset>
 
@@ -206,6 +207,7 @@
     L.push("Business:     "+(val('biz')||"—")+(val('web')?"  ("+val('web')+")":""));
     L.push("Contact:      "+(val('name')||"—")+"  |  "+(val('email')||"—")+(val('phone')?"  |  "+val('phone'):""));
     L.push("Sells:        "+(val('what')||"—"));
+    L.push("Logo:         "+(val('logo')||"— (Claude will pull it from their website)"));
     L.push("");
     L.push("— FOR THE CALCULATOR —");
     L.push("Order system:        "+(val('system')||"—"));
