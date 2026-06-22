@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niblock Quote Calculator (back of house)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#0090d0;--brand-dark:#0077af;--brand-soft:#e2f3fb;--navy:#0c2c47;--navy-2:#113a5c;
+    --ink:#1a2430;--muted:#5c6878;--line:#e5ebf1;--bg:#f4f8fb;--card:#fff;--green:#1e7a34;
+    --radius:14px;--shadow:0 10px 30px rgba(12,44,71,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;padding:0 0 60px}
+  h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);letter-spacing:-.02em}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(120deg,var(--navy),var(--navy-2));color:#fff;padding:24px 0}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:11px;font-family:'Plus Jakarta Sans';font-weight:800;font-size:1.25rem}
+  .logo .mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#16507f);display:grid;place-items:center;font-size:1rem;box-shadow:var(--shadow)}
+  .logo small{display:block;font-size:.6rem;font-weight:500;letter-spacing:.05em;color:#aebcd1;text-transform:uppercase}
+  .tag{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;font-family:'Plus Jakarta Sans'}
+  .banner{background:#fff7e8;border:1px solid #f3dca8;color:#7a5410;border-radius:12px;padding:13px 16px;margin:22px 0;font-size:.9rem}
+  .banner b{color:#5e3f08}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .card h2{font-size:1.12rem;margin-bottom:4px}
+  h3.grouphd{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-dark);margin:16px 0 2px;font-weight:700}
+  .card .sub{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .row:last-child{border-bottom:0}
+  .row label{font-size:.9rem;font-weight:500}
+  .row .hint{display:block;font-size:.73rem;color:var(--muted);font-weight:400}
+  input[type=number],select{font-family:inherit;font-size:.93rem;border:1.5px solid var(--line);border-radius:9px;padding:7px 10px;width:104px;text-align:right;color:var(--ink);background:#fff}
+  select{text-align:left;width:auto;min-width:140px}
+  input:focus,select:focus{outline:0;border-color:var(--brand)}
+  input[type=checkbox]{width:auto}
+  .unit{color:var(--muted);font-size:.8rem}
+  .inline{display:flex;align-items:center;gap:5px}
+  .results{grid-column:1 / -1}
+  .oneoff{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--brand-soft);border:1px solid #cde9f6;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:.9rem}
+  .oneoff b{font-family:'Plus Jakarta Sans';color:var(--navy)}
+  .res-head{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .stat{background:var(--brand-soft);border:1px solid #cde9f6;border-radius:12px;padding:15px}
+  .stat.green{background:#e8f6ec;border-color:#bfe4c8}.stat.navy{background:var(--navy);border-color:var(--navy)}
+  .stat .lbl{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .stat.navy .lbl{color:#aebcd1}
+  .stat .val{font-family:'Plus Jakarta Sans';font-weight:800;font-size:1.55rem;color:var(--navy);line-height:1.1;margin-top:4px}
+  .stat.green .val{color:var(--green)}.stat.navy .val{color:#fff}
+  .stat .note{font-size:.74rem;color:var(--muted);margin-top:3px}.stat.navy .note{color:#aebcd1}
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:.91rem}
+  th,td{text-align:right;padding:8px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-family:'Plus Jakarta Sans';font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+  tbody tr:hover{background:#fafcfe}
+  tfoot td{font-weight:800;font-family:'Plus Jakarta Sans';color:var(--navy);border-top:2px solid var(--navy);border-bottom:0;padding-top:11px}
+  textarea{width:100%;min-height:185px;border:1.5px solid var(--line);border-radius:10px;padding:13px;font-family:'Inter';font-size:.85rem;color:var(--ink);line-height:1.5;resize:vertical}
+  .btn{font-family:'Plus Jakarta Sans';font-weight:700;border:0;border-radius:999px;padding:11px 20px;font-size:.9rem;cursor:pointer;background:var(--brand);color:#fff;transition:.15s}
+  .btn:hover{background:var(--brand-dark)}.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .foot{color:var(--muted);font-size:.8rem;margin-top:30px;text-align:center}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}.res-head{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="logo"><span class="mark">N</span><span>NIBLOCK<small>Quote Calculator</small></span></div>
+  <span class="tag">Back of house · internal pricing tool</span>
+</div></header>
+
+<div class="wrap">
+  <div class="banner">⚙️ <b>Set your real rates once.</b> Rates are UK-benchmark placeholders — overwrite with Niblock's true costs and your couriers' live rates; they're remembered on this computer. For carriage, paste your courier's cost for the typical parcel into each destination zone.</div>
+
+  <div class="grid">
+    <!-- THIS QUOTE -->
+    <div class="card">
+      <h2>This quote</h2>
+      <p class="sub">The prospect's profile and volumes.</p>
+
+      <h3 class="grouphd">Product &amp; setup</h3>
+      <div class="row"><label>Order system<span class="hint">for integration scoping</span></label>
+        <select id="ordersystem"><option>Shopify</option><option>WooCommerce</option><option>Amazon</option><option>eBay</option><option>Etsy</option><option>Magento</option><option>BigCommerce</option><option>Linnworks</option><option>Mintsoft</option><option>Brightpearl</option><option>Other / manual</option></select></div>
+      <div class="row"><label>Number of SKUs<span class="hint">drives setup, management &amp; stocktake</span></label><input type="number" id="skus" value="250" min="0"></div>
+      <div class="row"><label>Best-before / use-by dates?<span class="hint">needs batch &amp; FEFO rotation</span></label><input type="checkbox" id="expiry"></div>
+      <div class="row"><label>Stocktake hours / month<span class="hint">as required — more SKUs, more hours</span></label><input type="number" id="stockhours" value="2" min="0" step="0.5"></div>
+
+      <h3 class="grouphd">Orders &amp; handling</h3>
+      <div class="row"><label>Monthly orders</label><input type="number" id="orders" value="1000" min="0"></div>
+      <div class="row"><label>Avg items (picks) per order</label><input type="number" id="items" value="2" min="0" step="0.1"></div>
+      <div class="row"><label>Picks included in base fee<span class="hint">extras charged above this</span></label><input type="number" id="includedpicks" value="2" min="0" step="1"></div>
+      <div class="row"><label>Packaging supplied by</label><select id="packsupply"><option value="nib">Niblock (we supply)</option><option value="cli">Client (they supply)</option></select></div>
+      <div class="row"><label>Standard gift wrap<span class="hint">% of orders</span></label><div class="inline"><input type="number" id="giftpct" value="10" min="0" max="100"><span class="unit">%</span></div></div>
+      <div class="row"><label>Premium gift wrap<span class="hint">% of orders</span></label><div class="inline"><input type="number" id="giftprempct" value="0" min="0" max="100"><span class="unit">%</span></div></div>
+      <div class="row"><label>Returns rate</label><div class="inline"><input type="number" id="returns" value="6" min="0" step="0.5"><span class="unit">%</span></div></div>
+      <div class="row"><label>Apply Q4 peak surcharge?</label><input type="checkbox" id="peak"></div>
+
+      <h3 class="grouphd">Storage</h3>
+      <div class="row"><label>Pallets stored (avg)</label><input type="number" id="pallets" value="4" min="0"></div>
+      <div class="row"><label>Inbound pallets / month</label><input type="number" id="inbound" value="4" min="0"></div>
+
+      <h3 class="grouphd">Delivery — parcels per month by destination</h3>
+      <div class="row"><label>Typical parcel size<span class="hint">guides which courier rate to enter</span></label>
+        <select id="band"><option>Large letter (&lt;250g)</option><option selected>Small parcel (&lt;1kg)</option><option>Up to 2kg</option><option>Up to 5kg</option><option>Up to 30kg</option></select></div>
+      <div class="row"><label>Express / next-day<span class="hint">% needing fast (vs tracked standard)</span></label><div class="inline"><input type="number" id="expresspct" value="0" min="0" max="100"><span class="unit">%</span></div></div>
+      <div class="row"><label>Mainland UK</label><input type="number" id="p_uk" value="850" min="0"></div>
+      <div class="row"><label>UK remote / offshore<span class="hint">Highlands, Islands, NI</span></label><input type="number" id="p_rem" value="50" min="0"></div>
+      <div class="row"><label>EU export</label><input type="number" id="p_eu" value="70" min="0"></div>
+      <div class="row"><label>Rest of world export</label><input type="number" id="p_row" value="30" min="0"></div>
+
+      <h3 class="grouphd">Pricing</h3>
+      <div class="row"><label>Target margin<span class="hint">your profit on fulfilment</span></label><div class="inline"><input type="number" id="margin" value="25" min="0" max="90"><span class="unit">%</span></div></div>
+    </div>
+
+    <!-- RATE CARD -->
+    <div class="card">
+      <h2>Rate card</h2>
+      <p class="sub">Niblock's unit costs. Edit and they're saved.</p>
+
+      <h3 class="grouphd">One-off onboarding</h3>
+      <div class="row"><label>Base onboarding</label><div class="inline"><span class="unit">£</span><input type="number" id="r_baseonboard" value="150" step="10"></div></div>
+      <div class="row"><label>SKU setup</label><div class="inline"><span class="unit">£</span><input type="number" id="r_skusetup" value="0.50" step="0.05"><span class="unit">/SKU</span></div></div>
+
+      <h3 class="grouphd">Recurring</h3>
+      <div class="row"><label>Account / management fee</label><div class="inline"><span class="unit">£</span><input type="number" id="r_account" value="50" step="1"><span class="unit">/mo</span></div></div>
+      <div class="row"><label>SKU management</label><div class="inline"><span class="unit">£</span><input type="number" id="r_skumgmt" value="0.05" step="0.01"><span class="unit">/SKU/mo</span></div></div>
+      <div class="row"><label>Goods-in / receiving</label><div class="inline"><span class="unit">£</span><input type="number" id="r_goodsin" value="18" step="0.5"><span class="unit">/pallet</span></div></div>
+      <div class="row"><label>Storage</label><div class="inline"><span class="unit">£</span><input type="number" id="r_storage" value="3.00" step="0.1"><span class="unit">/pallet/wk</span></div></div>
+      <div class="row"><label>Stock-taking</label><div class="inline"><span class="unit">£</span><input type="number" id="r_stock" value="22" step="1"><span class="unit">/hour</span></div></div>
+
+      <h3 class="grouphd">Per order</h3>
+      <div class="row"><label>Base pick &amp; pack<span class="hint">covers included picks</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_pickbase" value="1.45" step="0.05"></div></div>
+      <div class="row"><label>Each extra pick<span class="hint">above the baseline</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_pickx" value="0.35" step="0.05"></div></div>
+      <div class="row"><label>Packaging<span class="hint">if Niblock supplies</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_pack" value="0.65" step="0.05"></div></div>
+      <div class="row"><label>Standard gift wrap</label><div class="inline"><span class="unit">£</span><input type="number" id="r_gift" value="1.20" step="0.05"></div></div>
+      <div class="row"><label>Premium gift wrap</label><div class="inline"><span class="unit">£</span><input type="number" id="r_giftprem" value="3.50" step="0.1"></div></div>
+      <div class="row"><label>Batch / expiry handling<span class="hint">if best-before applies</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_batch" value="0.10" step="0.05"></div></div>
+      <div class="row"><label>Returns handling<span class="hint">per returned unit</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_return" value="2.00" step="0.1"></div></div>
+      <div class="row"><label>Q4 peak surcharge</label><div class="inline"><span class="unit">£</span><input type="number" id="r_peak" value="0.15" step="0.05"></div></div>
+
+      <h3 class="grouphd">Carriage — your courier cost per parcel</h3>
+      <div class="row"><label>Mainland UK</label><div class="inline"><span class="unit">£</span><input type="number" id="z_uk" value="3.20" step="0.05"></div></div>
+      <div class="row"><label>UK remote / offshore</label><div class="inline"><span class="unit">£</span><input type="number" id="z_rem" value="6.50" step="0.05"></div></div>
+      <div class="row"><label>EU export</label><div class="inline"><span class="unit">£</span><input type="number" id="z_eu" value="9.50" step="0.1"></div></div>
+      <div class="row"><label>Rest of world export</label><div class="inline"><span class="unit">£</span><input type="number" id="z_row" value="14.00" step="0.1"></div></div>
+      <div class="row"><label>Express uplift<span class="hint">extra per express parcel</span></label><div class="inline"><span class="unit">£</span><input type="number" id="r_express" value="2.50" step="0.1"></div></div>
+      <div class="row"><label>Carriage markup</label><div class="inline"><input type="number" id="r_carmk" value="10" step="1"><span class="unit">%</span></div></div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card results">
+      <h2>The numbers</h2>
+      <p class="sub">Left = Niblock's cost. Right = client quote (margin on fulfilment; carriage at courier cost + markup).</p>
+      <div class="oneoff">📦 <span><b id="o_setup_sell">£0</b> one-off onboarding quote <span class="unit">(cost <span id="o_setup_cost">£0</span> · <span id="o_skus">0</span> SKUs)</span></span></div>
+      <div class="res-head">
+        <div class="stat"><div class="lbl">Cost / order</div><div class="val" id="k_cpo">£0.00</div><div class="note">all-in incl. carriage</div></div>
+        <div class="stat green"><div class="lbl">Quote / order</div><div class="val" id="k_spo">£0.00</div><div class="note">price to the client</div></div>
+        <div class="stat navy"><div class="lbl">Monthly contract</div><div class="val" id="k_mrr">£0</div><div class="note">recurring revenue</div></div>
+        <div class="stat green"><div class="lbl">Annual value</div><div class="val" id="k_acv">£0</div><div class="note">recurring, yr 1 + setup</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Component</th><th>Basis</th><th>Monthly cost</th><th>Monthly quote</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr><td>Monthly total</td><td></td><td id="t_cost">£0</td><td id="t_sell">£0</td></tr>
+          <tr><td style="color:var(--green)">Monthly gross profit</td><td id="t_gmpc" style="color:var(--green);font-weight:700"></td><td></td><td id="t_gm" style="color:var(--green)">£0</td></tr>
+        </tfoot>
+      </table>
+      <div style="margin-top:18px">
+        <h3 style="font-size:.95rem;margin-bottom:8px">Proposal summary (copy into a proposal)</h3>
+        <textarea id="summary" readonly></textarea>
+        <div class="toolbar">
+          <button class="btn" onclick="copySummary()">Copy summary</button>
+          <button class="btn ghost" onclick="resetRates()">Reset rates to benchmarks</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="foot">Niblock Logistics — internal quoting tool. Figures are estimates for pricing decisions, not a binding quote. Confirm live courier rates and storage at point of sale.</p>
+</div>
+
+<script>
+const RATE_IDS=["r_baseonboard","r_skusetup","r_account","r_skumgmt","r_goodsin","r_storage","r_stock","r_pickbase","r_pickx","r_pack","r_gift","r_giftprem","r_batch","r_return","r_peak","z_uk","z_rem","z_eu","z_row","r_express","r_carmk"];
+const DEFAULTS={r_baseonboard:150,r_skusetup:0.50,r_account:50,r_skumgmt:0.05,r_goodsin:18,r_storage:3.00,r_stock:22,r_pickbase:1.45,r_pickx:0.35,r_pack:0.65,r_gift:1.20,r_giftprem:3.50,r_batch:0.10,r_return:2.00,r_peak:0.15,z_uk:3.20,z_rem:6.50,z_eu:9.50,z_row:14.00,r_express:2.50,r_carmk:10};
+const WEEKS=4.333, $=id=>document.getElementById(id);
+const gbp=n=>"£"+(Math.round(n)).toLocaleString("en-GB");
+const gbp2=n=>"£"+n.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
+function loadRates(){try{const s=JSON.parse(localStorage.getItem("niblockRates3")||"{}");RATE_IDS.forEach(id=>{if(s[id]!=null)$(id).value=s[id];});}catch(e){}}
+function saveRates(){const s={};RATE_IDS.forEach(id=>s[id]=parseFloat($(id).value)||0);localStorage.setItem("niblockRates3",JSON.stringify(s));}
+function resetRates(){RATE_IDS.forEach(id=>$(id).value=DEFAULTS[id]);saveRates();calc();}
+
+function calc(){
+  const v=id=>parseFloat($(id).value)||0;
+  const skus=v("skus"),orders=v("orders"),items=v("items"),incl=v("includedpicks"),
+        giftpct=v("giftpct")/100,giftprempct=v("giftprempct")/100,returns=v("returns")/100,
+        pallets=v("pallets"),inbound=v("inbound"),stockhours=v("stockhours"),margin=Math.min(0.9,v("margin")/100),
+        expiry=$("expiry").checked,peakOn=$("peak").checked,cliPack=$("packsupply").value==="cli",
+        p_uk=v("p_uk"),p_rem=v("p_rem"),p_eu=v("p_eu"),p_row=v("p_row"),expresspct=v("expresspct")/100;
+  const r={};RATE_IDS.forEach(id=>r[id]=v(id));
+  const parcels=p_uk+p_rem+p_eu+p_row;
+  const extraPicks=Math.max(0,items-incl);
+  const setupCost=r.r_baseonboard+skus*r.r_skusetup;
+  const c={
+    account:r.r_account,
+    sku:skus*r.r_skumgmt,
+    storage:pallets*r.r_storage*WEEKS,
+    goodsin:inbound*r.r_goodsin,
+    stock:stockhours*r.r_stock,
+    pickpack:orders*(r.r_pickbase+extraPicks*r.r_pickx),
+    pack:cliPack?0:orders*r.r_pack,
+    gift:orders*(giftpct*r.r_gift+giftprempct*r.r_giftprem),
+    batch:expiry?orders*r.r_batch:0,
+    returns:orders*returns*r.r_return,
+    peak:peakOn?orders*r.r_peak:0,
+    carriage:(p_uk*r.z_uk+p_rem*r.z_rem+p_eu*r.z_eu+p_row*r.z_row)+(parcels*expresspct*r.r_express)
+  };
+  const fulfilCost=c.account+c.sku+c.storage+c.goodsin+c.stock+c.pickpack+c.pack+c.gift+c.batch+c.returns+c.peak;
+  const totalCost=fulfilCost+c.carriage;
+  const mk=x=> margin<1? x/(1-margin):x;
+  const s={};for(const k in c){s[k]= k==="carriage"? c.carriage*(1+r.r_carmk/100): mk(c[k]);}
+  const totalSell=Object.values(s).reduce((a,b)=>a+b,0);
+  const setupSell=mk(setupCost), gp=totalSell-totalCost;
+  $("o_setup_cost").textContent=gbp(setupCost);$("o_setup_sell").textContent=gbp(setupSell);$("o_skus").textContent=skus.toLocaleString("en-GB");
+  $("k_cpo").textContent=orders?gbp2(totalCost/orders):"£0.00";
+  $("k_spo").textContent=orders?gbp2(totalSell/orders):"£0.00";
+  $("k_mrr").textContent=gbp(totalSell);
+  $("k_acv").textContent=gbp(totalSell*12+setupSell);
+  const rows=[
+    ["Account / management","fixed",c.account,s.account],
+    ["SKU management",skus+" SKUs",c.sku,s.sku],
+    ["Storage",pallets+" pallets",c.storage,s.storage],
+    ["Goods-in / receiving",inbound+" pallets",c.goodsin,s.goodsin],
+    ["Stock-taking",stockhours+" hrs",c.stock,s.stock],
+    ["Pick &amp; pack",orders+" orders · "+items+" picks ("+incl+" incl)",c.pickpack,s.pickpack],
+  ];
+  rows.push(cliPack?["Packaging","client-supplied",0,0]:["Packaging",orders+" orders",c.pack,s.pack]);
+  if(c.gift>0)rows.push(["Gift wrap",Math.round(orders*giftpct)+" std / "+Math.round(orders*giftprempct)+" prem",c.gift,s.gift]);
+  if(expiry)rows.push(["Batch / expiry handling",orders+" orders",c.batch,s.batch]);
+  rows.push(["Returns",Math.round(orders*returns)+" units",c.returns,s.returns]);
+  if(peakOn)rows.push(["Q4 peak surcharge",orders+" orders",c.peak,s.peak]);
+  rows.push(["Carriage / shipping",parcels+" parcels ("+p_uk+"/"+p_rem+"/"+p_eu+"/"+p_row+")"+(expresspct?" · "+Math.round(expresspct*100)+"% exp":""),c.carriage,s.carriage]);
+  $("tbody").innerHTML=rows.map(x=>`<tr><td>${x[0]}</td><td style="color:var(--muted);font-size:.82rem">${x[1]}</td><td>${gbp2(x[2])}</td><td>${gbp2(x[3])}</td></tr>`).join("");
+  $("t_cost").textContent=gbp(totalCost);$("t_sell").textContent=gbp(totalSell);
+  $("t_gm").textContent=gbp(gp);$("t_gmpc").textContent=totalSell?Math.round(gp/totalSell*100)+"% margin":"";
+  const band=$("band").value, sys=$("ordersystem").value;
+  $("summary").value=
+`NIBLOCK LOGISTICS — INDICATIVE FULFILMENT QUOTE
+
+Order system: ${sys}.
+Profile: ${skus.toLocaleString("en-GB")} SKUs${expiry?" (best-before / batch rotation)":""} · ${orders.toLocaleString("en-GB")} orders/month · ${items} picks/order avg (${incl} included) · typical ${band.toLowerCase()}.
+Parcels/month: ${parcels.toLocaleString("en-GB")} — Mainland UK ${p_uk}, UK remote ${p_rem}, EU ${p_eu}, RoW ${p_row}${expresspct?` · ${Math.round(expresspct*100)}% express`:""}.
+Packaging: ${cliPack?"client-supplied":"Niblock-supplied"}${giftpct||giftprempct?` · Gift wrap: ${Math.round(giftpct*100)}% standard, ${Math.round(giftprempct*100)}% premium`:""} · Returns: ${(returns*100).toFixed(0)}%.
+
+One-off onboarding: ${gbp(setupSell)} (SKU set-up & system integration).
+Indicative price: ${orders?gbp2(totalSell/orders):"£0.00"} per order, all-in incl. carriage.
+Estimated monthly: ${gbp(totalSell)}  ·  First-year value: ${gbp(totalSell*12+setupSell)}.
+
+Included: goods-in & receiving, secure storage, SKU & stock management, pick & pack, packaging${cliPack?" handling":""}${giftpct||giftprempct?" (incl. gift wrap)":""}, tracked dispatch & carriage to UK/EU/worldwide${expresspct?" with express option":""}, and returns handling — no WMS integration fees, no long lock-in.
+Final pricing confirmed after a short discovery call; live courier rates from your carrier accounts.`;
+  saveRates();
+}
+function copySummary(){const t=$("summary");t.select();document.execCommand("copy");event.target.textContent="Copied ✓";setTimeout(()=>event.target.textContent="Copy summary",1500);}
+document.addEventListener("input",calc);
+loadRates();calc();
+</script>
+</body>
+</html>

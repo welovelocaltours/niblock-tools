@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niblock — Fulfilment Discovery / Quote Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#0090d0;--brand-dark:#0077af;--brand-soft:#e2f3fb;--navy:#0c2c47;--navy-2:#113a5c;
+    --ink:#1a2430;--muted:#5c6878;--line:#e5ebf1;--bg:#f4f8fb;--card:#fff;--radius:14px;--shadow:0 10px 30px rgba(12,44,71,.09)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;padding-bottom:60px}
+  h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);letter-spacing:-.02em}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(120deg,var(--navy),var(--navy-2));color:#fff;padding:30px 0}
+  header .wrap{display:flex;align-items:center;gap:11px}
+  .mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#16507f);display:grid;place-items:center;font-size:1rem;font-family:'Plus Jakarta Sans';font-weight:800;box-shadow:var(--shadow)}
+  .logo b{font-family:'Plus Jakarta Sans';font-weight:800;font-size:1.25rem}
+  .logo small{display:block;font-size:.6rem;letter-spacing:.05em;color:#aebcd1;text-transform:uppercase}
+  .intro{margin:24px auto 0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .intro h1{font-size:1.4rem;margin-bottom:6px}
+  .intro p{color:var(--muted);font-size:.95rem}
+  form{margin-top:18px}
+  fieldset{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+  legend{font-family:'Plus Jakarta Sans';font-weight:700;color:var(--brand-dark);font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;padding:0 8px}
+  .f{margin-bottom:14px}
+  .f:last-child{margin-bottom:0}
+  label{display:block;font-weight:600;font-size:.9rem;margin-bottom:5px}
+  label .opt{color:var(--muted);font-weight:400;font-size:.8rem}
+  .hint{font-size:.78rem;color:var(--muted);margin-top:3px}
+  input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.95rem;color:var(--ink);background:#fff}
+  input:focus,select:focus,textarea:focus{outline:0;border-color:var(--brand)}
+  textarea{min-height:80px;resize:vertical}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .radios{display:flex;gap:18px;flex-wrap:wrap}
+  .radios label{font-weight:500;display:flex;align-items:center;gap:6px;margin:0}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .checks label{font-weight:500;display:flex;align-items:center;gap:8px;margin:0;font-size:.92rem}
+  .btn{font-family:'Plus Jakarta Sans';font-weight:700;border:0;border-radius:999px;padding:13px 26px;font-size:1rem;cursor:pointer;background:var(--brand);color:#fff;transition:.15s}
+  .btn:hover{background:var(--brand-dark)}
+  .btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .result{display:none;margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .result.show{display:block}
+  .result h2{font-size:1.1rem;margin-bottom:4px}
+  .result .sub{color:var(--muted);font-size:.88rem;margin-bottom:12px}
+  .out{width:100%;min-height:300px;border:1.5px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;line-height:1.5;color:var(--ink);white-space:pre;overflow:auto}
+  .foot{color:var(--muted);font-size:.8rem;text-align:center;margin-top:24px}
+  @media(max-width:620px){.grid2,.grid4,.checks{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="mark">N</span>
+  <span class="logo"><b>NIBLOCK</b><small>Logistics Solutions</small></span>
+</div></header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Let's build your fulfilment quote</h1>
+    <p>A few quick questions about your business and volumes. It takes ~3 minutes, there's no obligation, and we'll come back with clear, tailored pricing — usually the same working day. (Internal note: this doubles as the discovery-call script; answers map straight to the quote calculator.)</p>
+  </div>
+
+  <form id="form" onsubmit="return false;">
+    <fieldset>
+      <legend>About you</legend>
+      <div class="grid2">
+        <div class="f"><label>Business name</label><input type="text" id="biz" placeholder="Captain Chippies"></div>
+        <div class="f"><label>Website</label><input type="text" id="web" placeholder="captainchippies.com"></div>
+        <div class="f"><label>Your name</label><input type="text" id="name" placeholder="Jane Smith"></div>
+        <div class="f"><label>Email</label><input type="email" id="email" placeholder="jane@yourbrand.co.uk"></div>
+        <div class="f"><label>Phone <span class="opt">(optional)</span></label><input type="tel" id="phone" placeholder="07000 000000"></div>
+        <div class="f"><label>What do you sell?</label><input type="text" id="what" placeholder="e.g. small-batch hot sauce"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Products &amp; stock</legend>
+      <div class="grid2">
+        <div class="f"><label>Which system do you process orders on?</label>
+          <select id="system"><option value="">Choose…</option><option>Shopify</option><option>WooCommerce</option><option>Amazon</option><option>eBay</option><option>Etsy</option><option>Magento</option><option>BigCommerce</option><option>Squarespace</option><option>Other / manual</option></select></div>
+        <div class="f"><label>How many products (SKUs)?</label><input type="number" id="skus" min="0" placeholder="e.g. 12"></div>
+      </div>
+      <div class="f"><label>Do your products have best-before / use-by dates?</label>
+        <div class="radios"><label><input type="radio" name="expiry" value="Yes"> Yes</label><label><input type="radio" name="expiry" value="No" checked> No</label></div>
+        <div class="hint">If yes, we manage batch &amp; date rotation (FEFO).</div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Orders &amp; packing</legend>
+      <div class="grid2">
+        <div class="f"><label>Orders per month <span class="opt">(roughly)</span></label><input type="number" id="orders" min="0" placeholder="e.g. 400"></div>
+        <div class="f"><label>Average items per order</label><input type="number" id="items" min="0" step="0.1" placeholder="e.g. 1.5"></div>
+      </div>
+      <div class="f"><label>Who supplies the packaging?</label>
+        <div class="radios"><label><input type="radio" name="pack" value="Niblock supplies" checked> Niblock supplies</label><label><input type="radio" name="pack" value="We supply our own"> We supply our own</label></div></div>
+      <div class="f"><label>Do you need gift wrapping?</label>
+        <div class="radios"><label><input type="radio" name="gift" value="None" checked> None</label><label><input type="radio" name="gift" value="Standard"> Standard</label><label><input type="radio" name="gift" value="Premium"> Premium</label><label><input type="radio" name="gift" value="Both"> Both</label></div>
+        <div class="hint">Roughly what % of orders are gifts? <input type="number" id="giftpct" min="0" max="100" style="width:90px;display:inline-block;margin-left:6px" placeholder="%"></div></div>
+      <div class="f"><label>Returns rate <span class="opt">(rough % of orders returned)</span></label><input type="number" id="returns" min="0" step="0.5" style="max-width:140px" placeholder="e.g. 4"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Storage</legend>
+      <div class="grid2">
+        <div class="f"><label>Roughly how much stock? <span class="opt">(pallets, if known)</span></label><input type="number" id="pallets" min="0" placeholder="e.g. 2"></div>
+        <div class="f"><label>Deliveries in per month <span class="opt">(inbound)</span></label><input type="number" id="inbound" min="0" placeholder="e.g. 2"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Delivery</legend>
+      <div class="f"><label>Typical parcel size</label>
+        <select id="band"><option>Large letter (under 250g)</option><option selected>Small parcel (under 1kg)</option><option>Up to 2kg</option><option>Up to 5kg</option><option>Up to 30kg</option></select></div>
+      <div class="f"><label>Where do your parcels go each month? <span class="opt">(rough counts)</span></label>
+        <div class="grid4">
+          <div><div class="hint">Mainland UK</div><input type="number" id="p_uk" min="0" placeholder="0"></div>
+          <div><div class="hint">UK remote/NI</div><input type="number" id="p_rem" min="0" placeholder="0"></div>
+          <div><div class="hint">EU</div><input type="number" id="p_eu" min="0" placeholder="0"></div>
+          <div><div class="hint">Rest of world</div><input type="number" id="p_row" min="0" placeholder="0"></div>
+        </div></div>
+      <div class="f"><label>Do you need fast / express delivery?</label>
+        <div class="radios"><label><input type="radio" name="express" value="No, tracked standard is fine" checked> Tracked standard</label><label><input type="radio" name="express" value="On some orders"> On some orders</label><label><input type="radio" name="express" value="On all orders"> On all orders</label></div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Where you are now &amp; what matters</legend>
+      <div class="f"><label>How do you handle fulfilment today?</label>
+        <div class="radios"><label><input type="radio" name="current" value="We do it ourselves" checked> We do it ourselves</label><label><input type="radio" name="current" value="We use another 3PL"> We use another 3PL</label><label><input type="radio" name="current" value="A mix of both"> A mix</label></div>
+        <div class="hint">If you use a provider, who? <input type="text" id="supplier" style="width:200px;display:inline-block;margin-left:6px" placeholder="(optional)"></div></div>
+      <div class="f"><label>What matters most to you? <span class="opt">(tick your top priorities)</span></label>
+        <div class="checks">
+          <label><input type="checkbox" class="prio" value="Accuracy"> Accuracy</label>
+          <label><input type="checkbox" class="prio" value="Fast dispatch"> Fast dispatch</label>
+          <label><input type="checkbox" class="prio" value="Low cost"> Low cost</label>
+          <label><input type="checkbox" class="prio" value="Flexibility to scale"> Flexibility to scale</label>
+          <label><input type="checkbox" class="prio" value="Personal service"> Personal service</label>
+          <label><input type="checkbox" class="prio" value="International / export"> International / export</label>
+          <label><input type="checkbox" class="prio" value="Reliability"> Reliability</label>
+          <label><input type="checkbox" class="prio" value="Smooth returns"> Smooth returns</label>
+        </div></div>
+      <div class="f"><label>What's the biggest pain point you want to fix?</label><textarea id="pain" placeholder="e.g. spending every evening packing; missed dispatches at peak; shipping costs too high"></textarea></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Anything else</legend>
+      <div class="f"><label>Do any of these apply? <span class="opt">(tick all)</span></label>
+        <div class="checks">
+          <label><input type="checkbox" class="extra" value="Subscriptions / recurring boxes"> Subscriptions / recurring boxes</label>
+          <label><input type="checkbox" class="extra" value="Limited / seasonal drops"> Limited / seasonal drops</label>
+          <label><input type="checkbox" class="extra" value="Wholesale / B2B orders"> Wholesale / B2B orders</label>
+          <label><input type="checkbox" class="extra" value="Sell at pop-ups / events"> Pop-ups / events</label>
+          <label><input type="checkbox" class="extra" value="Currently with another 3PL"> Currently with another 3PL</label>
+          <label><input type="checkbox" class="extra" value="Fragile / temperature-sensitive"> Fragile / temp-sensitive</label>
+        </div></div>
+      <div class="f"><label>What's prompting the move, and anything we should know? <span class="opt">(optional)</span></label><textarea id="notes" placeholder="e.g. founders packing every order, scaling to wholesale + EU export"></textarea></div>
+    </fieldset>
+
+    <div class="toolbar">
+      <button class="btn" type="button" onclick="generate()">Generate summary</button>
+      <button class="btn ghost" type="button" onclick="document.getElementById('form').reset()">Clear</button>
+    </div>
+  </form>
+
+  <div class="result" id="result">
+    <h2>Discovery summary</h2>
+    <p class="sub">Copy this into the quote calculator (and your CRM). When Resend is connected, this will also email to info@niblocklogistics.co.uk on submit.</p>
+    <textarea class="out" id="out" readonly></textarea>
+    <div class="toolbar"><button class="btn" type="button" onclick="copyOut()">Copy summary</button></div>
+  </div>
+
+  <p class="foot">Niblock Logistics Solutions · 01293 773130 · info@niblocklogistics.co.uk · No obligation, no lock-in.</p>
+</div>
+
+<script>
+  const $=id=>document.getElementById(id);
+  const val=id=>($(id)?$(id).value.trim():"");
+  const radio=n=>{const el=document.querySelector('input[name="'+n+'"]:checked');return el?el.value:"";};
+  function suggestTestimonial(prios){
+    const map=[['Accuracy','Flip Flop Storage — "unrivalled accuracy & stock management"'],
+      ['Smooth returns','Flip Flop Storage — "unrivalled accuracy & stock management"'],
+      ['Personal service','Plain English Kitchens — "the courteous careful carriers"'],
+      ['International / export','Plain English Kitchens — "whether nationally or overseas"'],
+      ['Reliability','Prestige Distribution — "they never let us down"'],
+      ['Fast dispatch','Prestige Distribution — "they always perform admirably"'],
+      ['Flexibility to scale','EAST — "rapid improvements in productivity; competitive & flexible"'],
+      ['Low cost','EAST — "very competitive and flexible"']];
+    for(const [k,v] of map){ if(prios.includes(k)) return v; }
+    return 'FedEx Supply Chain — "our first port of call for service-critical solutions"';
+  }
+  function generate(){
+    const extras=[...document.querySelectorAll('.extra:checked')].map(c=>c.value);
+    const parcels=(+val('p_uk')||0)+(+val('p_rem')||0)+(+val('p_eu')||0)+(+val('p_row')||0);
+    const L=[];
+    L.push("NIBLOCK — FULFILMENT DISCOVERY SUMMARY");
+    L.push("Date: "+new Date().toLocaleDateString('en-GB'));
+    L.push("");
+    L.push("— BUSINESS —");
+    L.push("Business:     "+(val('biz')||"—")+(val('web')?"  ("+val('web')+")":""));
+    L.push("Contact:      "+(val('name')||"—")+"  |  "+(val('email')||"—")+(val('phone')?"  |  "+val('phone'):""));
+    L.push("Sells:        "+(val('what')||"—"));
+    L.push("");
+    L.push("— FOR THE CALCULATOR —");
+    L.push("Order system:        "+(val('system')||"—"));
+    L.push("SKUs:                "+(val('skus')||"—"));
+    L.push("Best-before dates:   "+radio('expiry'));
+    L.push("Monthly orders:      "+(val('orders')||"—"));
+    L.push("Avg items/order:     "+(val('items')||"—"));
+    L.push("Packaging:           "+radio('pack'));
+    L.push("Gift wrap:           "+radio('gift')+(val('giftpct')?"  ("+val('giftpct')+"% of orders)":""));
+    L.push("Returns rate:        "+(val('returns')?val('returns')+"%":"—"));
+    L.push("Pallets stored:      "+(val('pallets')||"— (to confirm)"));
+    L.push("Inbound pallets/mo:  "+(val('inbound')||"—"));
+    L.push("Typical parcel:      "+val('band'));
+    L.push("Express delivery:    "+radio('express'));
+    L.push("Parcels/month:       "+parcels+" total  —  UK "+(val('p_uk')||0)+" / remote "+(val('p_rem')||0)+" / EU "+(val('p_eu')||0)+" / RoW "+(val('p_row')||0));
+    L.push("");
+    const prios=[...document.querySelectorAll('.prio:checked')].map(c=>c.value);
+    L.push("— WHAT MATTERS —");
+    L.push("Current setup:        "+radio('current')+(val('supplier')?"  ("+val('supplier')+")":""));
+    L.push("Top priorities:       "+(prios.length?prios.join("; "):"—"));
+    L.push("Biggest pain point:   "+(val('pain')||"—"));
+    L.push("► Suggested testimonial for proposal: "+suggestTestimonial(prios));
+    L.push("");
+    L.push("— CONTEXT —");
+    L.push("Applies:      "+(extras.length?extras.join("; "):"—"));
+    L.push("Notes:        "+(val('notes')||"—"));
+    $('out').value=L.join("\n");
+    $('result').classList.add('show');
+    $('result').scrollIntoView({behavior:'smooth'});
+  }
+  function copyOut(){const t=$('out');t.select();document.execCommand('copy');event.target.textContent='Copied ✓';setTimeout(()=>event.target.textContent='Copy summary',1500);}
+</script>
+</body>
+</html>
