@@ -79,9 +79,13 @@ header.bar .t small{display:block;font-weight:500;font-size:.7rem;letter-spacing
   <!-- FORM -->
   <div class="panel form">
     <h1>New proposal</h1>
-    <p class="hint">Fill in the prospect details and the quote figures from the calculator, then generate a draft to review, edit and save as PDF.</p>
+    <p class="hint">Paste the enquiry email to auto-fill, add the quote figures from the calculator, then generate a draft to review, edit and save as PDF.</p>
 
-    <div class="sechead" style="border-top:0;padding-top:0;margin-top:0">The prospect</div>
+    <div class="f"><label>Paste the enquiry <span class="sub">(the email from info@)</span></label><textarea id="paste" rows="5" placeholder="Paste the whole &quot;WEBSITE QUOTE REQUEST&quot; email here, then click Fill form…"></textarea></div>
+    <button class="btn sec" id="parse">Fill form from enquiry ↓</button>
+    <p class="msg" id="pmsg" style="min-height:0;margin-top:6px"></p>
+
+    <div class="sechead">The prospect</div>
     <div class="f"><label>Brand / company name</label><input id="brand" placeholder="e.g. Captain Chippies"></div>
     <div class="f"><label>Contact name <span class="sub">(optional)</span></label><input id="contact" placeholder="e.g. Sam Patel"></div>
     <div class="f"><label>What they sell</label><input id="sells" placeholder="e.g. premium frozen seafood boxes"></div>
@@ -132,6 +136,25 @@ header.bar .t small{display:block;font-weight:500;font-size:.7rem;letter-spacing
     var h=JSON.parse(localStorage.getItem('niblockHandoff')||'null');
     if(h){ if(h.brand&&!$('brand').value)$('brand').value=h.brand; if(h.sells&&!$('sells').value)$('sells').value=h.sells; if(h.logo&&!$('logo').value)$('logo').value=h.logo; }
   }catch(e){}
+
+  // Auto-fill the form from a pasted enquiry email (the customer quote-request format)
+  $('parse').addEventListener('click',function(){
+    var text=$('paste').value||'';
+    var pm=$('pmsg');
+    if(!text.trim()){pm.style.color='#c0392b';pm.textContent='Paste the enquiry email first.';return;}
+    function g(re){var m=text.match(re);return m?m[1].trim():'';}
+    var biz=g(/Business:\s*(.+)/i).replace(/\s*\(.*\)\s*$/,'');
+    var contact=g(/Contact:\s*(.+)/i).split('|')[0].trim();
+    var sells=g(/Sells:\s*(.+)/i);
+    var prios=g(/Priorities:\s*(.+)/i);
+    if(biz)$('brand').value=biz;
+    if(contact)$('contact').value=contact;
+    if(sells)$('sells').value=sells;
+    if(prios)$('priorities').value=prios;
+    $('notes').value=text.trim();
+    pm.style.color='#0a7d28';
+    pm.textContent='Filled in ✓  Now add the quote figures below, then Generate.';
+  });
 
   function figuresText(){
     var L=[];
